@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAP ABAP Guide</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #2563eb);
+      color: white;
+      padding: 28px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #dbeafe;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      color: #0f172a;
+      font-size: 21px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 190px;
+      resize: vertical;
+      font-family: Consolas, monospace;
+    }
+
+    button {
+      border: none;
+      padding: 11px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #2563eb;
+      color: white;
+      margin-top: 14px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    .danger:hover {
+      background: #b91c1c;
+    }
+
+    .secondary {
+      background: #334155;
+    }
+
+    .secondary:hover {
+      background: #1e293b;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 190px;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .snippet-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .snippet {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      background: #ffffff;
+    }
+
+    .snippet-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .namespace {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .snippet h3 {
+      color: #0f172a;
+      margin-bottom: 5px;
+    }
+
+    .desc {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .snippet-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #64748b;
+      padding: 40px 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SAP ABAP Guide</h1>
+    <p>Save your ABAP programs, CDS views, reports, enhancements, and useful logic under namespaces.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Add ABAP Code</h2>
+
+      <label>Namespace / Category</label>
+      <select id="namespace">
+        <option value="Reports">Reports</option>
+        <option value="ALV">ALV</option>
+        <option value="CDS Views">CDS Views</option>
+        <option value="RAP">RAP</option>
+        <option value="BAPI/FM">BAPI / Function Module</option>
+        <option value="Enhancement">Enhancement</option>
+        <option value="Excel / abap2xlsx">Excel / abap2xlsx</option>
+        <option value="Transport / TOC">Transport / TOC</option>
+        <option value="Custom">Custom</option>
+      </select>
+
+      <label>Custom Namespace</label>
+      <input id="customNamespace" placeholder="Example: ZMM, ZFI, ZSD, Dynamic Table" />
+
+      <label>Code Title</label>
+      <input id="title" placeholder="Example: Dynamic Excel Upload Program" />
+
+      <label>Description</label>
+      <input id="description" placeholder="Small note about this code" />
+
+      <label>ABAP Code</label>
+      <textarea id="code" placeholder="Paste your ABAP code here..."></textarea>
+
+      <button onclick="saveSnippet()">Save Code</button>
+      <button class="secondary" onclick="clearForm()">Clear</button>
+    </section>
+
+    <section class="card">
+      <h2>My ABAP Library</h2>
+
+      <div class="toolbar">
+        <input id="search" oninput="renderSnippets()" placeholder="Search by title, namespace, description, or code..." />
+        <select id="filter" onchange="renderSnippets()">
+          <option value="All">All Namespaces</option>
+        </select>
+      </div>
+
+      <div id="snippetList" class="snippet-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    Your code is saved in this browser using localStorage.
+  </footer>
+
+  <script>
+    let snippets = JSON.parse(localStorage.getItem("sapAbapSnippets")) || [
+      {
+        namespace: "Reports",
+        title: "Simple ABAP Report Structure",
+        description: "Basic report format with selection screen and START-OF-SELECTION.",
+        code: `REPORT zsample_report.
+
+PARAMETERS: p_bukrs TYPE bukrs.
+
+START-OF-SELECTION.
+  WRITE: / 'Company Code:', p_bukrs.`
+      },
+      {
+        namespace: "Transport / TOC",
+        title: "TR Status Check from E070",
+        description: "Check transport request status before release logic.",
+        code: `DATA: lv_status TYPE e070-trstatus.
+
+SELECT SINGLE trstatus
+  FROM e070
+  INTO @lv_status
+  WHERE trkorr = @p_tr.
+
+IF sy-subrc <> 0.
+  MESSAGE 'TR not found' TYPE 'E'.
+ENDIF.`
+      }
+    ];
+
+    let editIndex = null;
+
+    function saveToStorage() {
+      localStorage.setItem("sapAbapSnippets", JSON.stringify(snippets));
+    }
+
+    function saveSnippet() {
+      const namespaceSelect = document.getElementById("namespace").value;
+      const customNamespace = document.getElementById("customNamespace").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const code = document.getElementById("code").value.trim();
+
+      const namespace = customNamespace || namespaceSelect;
+
+      if (!title || !code) {
+        alert("Please enter title and ABAP code.");
+        return;
+      }
+
+      const snippet = { namespace, title, description, code };
+
+      if (editIndex === null) {
+        snippets.unshift(snippet);
+      } else {
+        snippets[editIndex] = snippet;
+        editIndex = null;
+      }
+
+      saveToStorage();
+      clearForm();
+      renderSnippets();
+    }
+
+    function clearForm() {
+      document.getElementById("customNamespace").value = "";
+      document.getElementById("title").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("code").value = "";
+      editIndex = null;
+    }
+
+    function renderFilter() {
+      const filter = document.getElementById("filter");
+      const selected = filter.value;
+      const namespaces = ["All", ...new Set(snippets.map(item => item.namespace))];
+      filter.innerHTML = namespaces.map(ns => `<option value="${ns}">${ns}</option>`).join("");
+      filter.value = namespaces.includes(selected) ? selected : "All";
+    }
+
+    function renderSnippets() {
+      renderFilter();
+
+      const list = document.getElementById("snippetList");
+      const search = document.getElementById("search").value.toLowerCase();
+      const filter = document.getElementById("filter").value;
+
+      const filtered = snippets.filter(item => {
+        const text = `${item.namespace} ${item.title} ${item.description} ${item.code}`.toLowerCase();
+        const matchSearch = text.includes(search);
+        const matchFilter = filter === "All" || item.namespace === filter;
+        return matchSearch && matchFilter;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty">No ABAP code found.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(item => {
+        const realIndex = snippets.indexOf(item);
+        return `
+          <div class="snippet">
+            <div class="snippet-top">
+              <div>
+                <span class="namespace">${escapeHtml(item.namespace)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+              </div>
+            </div>
+            <p class="desc">${escapeHtml(item.description || "No description added.")}</p>
+            <pre><code>${escapeHtml(item.code)}</code></pre>
+            <div class="snippet-actions">
+              <button onclick="copyCode(${realIndex})">Copy</button>
+              <button class="secondary" onclick="editSnippet(${realIndex})">Edit</button>
+              <button class="danger" onclick="deleteSnippet(${realIndex})">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function copyCode(index) {
+      navigator.clipboard.writeText(snippets[index].code);
+      alert("Code copied!");
+    }
+
+    function editSnippet(index) {
+      const item = snippets[index];
+      document.getElementById("customNamespace").value = item.namespace;
+      document.getElementById("title").value = item.title;
+      document.getElementById("description").value = item.description;
+      document.getElementById("code").value = item.code;
+      editIndex = index;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteSnippet(index) {
+      if (confirm("Delete this ABAP code?")) {
+        snippets.splice(index, 1);
+        saveToStorage();
+        renderSnippets();
+      }
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    renderSnippets();
+  </script>
+</body>
+</html>
