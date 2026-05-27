@@ -3,174 +3,435 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SAP ABAP Guide</title>
+  <title>SAP Guide</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f62fe'/%3E%3Ctext x='50' y='61' font-size='34' text-anchor='middle' fill='white' font-family='Arial' font-weight='900'%3ESAP%3C/text%3E%3C/svg%3E" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    :root {
+      --primary: #0f62fe;
+      --primary-dark: #003d99;
+      --dark: #0f172a;
+      --muted: #64748b;
+      --soft: #f8fafc;
+      --line: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --violet: #7c3aed;
+      --cyan: #06b6d4;
     }
 
     body {
-      background: #f4f7fb;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0, transparent 34%),
+        radial-gradient(circle at bottom right, #ede9fe 0, transparent 30%),
+        linear-gradient(135deg, #f8fafc, #eef6ff);
       color: #1f2937;
     }
 
     header {
-      background: linear-gradient(135deg, #0f172a, #2563eb);
+      background: linear-gradient(135deg, #06142e, #0f62fe 55%, #38bdf8);
       color: white;
-      padding: 28px 18px;
-      text-align: center;
+      padding: 34px 18px 90px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      right: -90px;
+      top: -90px;
+      background: rgba(255,255,255,0.16);
+      border-radius: 50%;
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 14px;
     }
 
     header h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: clamp(34px, 5vw, 54px);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
     }
 
     header p {
-      color: #dbeafe;
-      font-size: 15px;
+      color: #e0f2fe;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 24px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.15);
+    }
+
+    .hero-card h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .hero-card ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: #f8fafc;
+      font-size: 14px;
+    }
+
+    .hero-card li::before {
+      content: "✓";
+      margin-right: 8px;
+      color: #86efac;
+      font-weight: bold;
     }
 
     .container {
-      max-width: 1200px;
-      margin: auto;
+      max-width: 1250px;
+      margin: -58px auto 0;
       padding: 24px;
       display: grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 390px 1fr;
       gap: 24px;
+      position: relative;
+      z-index: 2;
     }
 
     .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(226,232,240,0.8);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+    }
+
+    .add-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(239,246,255,0.92));
+      border: 1px solid #bfdbfe;
+      position: sticky;
+      top: 18px;
+      align-self: start;
+    }
+
+    .add-header {
+      background: linear-gradient(135deg, #0f172a, #2563eb);
+      color: white;
+      padding: 18px;
+      border-radius: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 14px 25px rgba(37,99,235,0.18);
+    }
+
+    .add-header h2 {
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .add-header p {
+      color: #dbeafe;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     h2 {
-      margin-bottom: 14px;
-      color: #0f172a;
-      font-size: 21px;
+      margin-bottom: 8px;
+      color: var(--dark);
+      font-size: 23px;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.5;
     }
 
     label {
       display: block;
-      margin-top: 12px;
-      margin-bottom: 6px;
-      font-weight: bold;
-      font-size: 14px;
+      margin-top: 13px;
+      margin-bottom: 7px;
+      font-weight: 800;
+      font-size: 13px;
+      color: #334155;
     }
 
     input,
     select,
     textarea {
       width: 100%;
-      padding: 11px;
+      padding: 13px 14px;
       border: 1px solid #cbd5e1;
-      border-radius: 10px;
+      border-radius: 15px;
       outline: none;
       font-size: 14px;
+      background: #fbfdff;
+      transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(15,98,254,0.12);
+      background: white;
     }
 
     textarea {
-      min-height: 190px;
+      min-height: 230px;
       resize: vertical;
       font-family: Consolas, monospace;
+      line-height: 1.5;
     }
 
     button {
       border: none;
-      padding: 11px 15px;
-      border-radius: 10px;
+      padding: 11px 16px;
+      border-radius: 14px;
       cursor: pointer;
-      font-weight: bold;
-      background: #2563eb;
+      font-weight: 900;
+      background: var(--primary);
       color: white;
       margin-top: 14px;
       transition: 0.2s;
+      box-shadow: 0 10px 18px rgba(15,98,254,0.18);
     }
 
     button:hover {
-      background: #1d4ed8;
+      background: var(--primary-dark);
       transform: translateY(-1px);
     }
 
     .danger {
-      background: #dc2626;
+      background: var(--danger);
+      box-shadow: 0 10px 18px rgba(220,38,38,0.14);
     }
 
     .danger:hover {
       background: #b91c1c;
     }
 
+    .mail-btn {
+      background: linear-gradient(135deg, #16a34a, #06b6d4);
+      box-shadow: 0 10px 18px rgba(22,163,74,0.16);
+    }
+
+    .mail-btn:hover {
+      background: linear-gradient(135deg, #15803d, #0891b2);
+    }
+
     .secondary {
       background: #334155;
+      box-shadow: 0 10px 18px rgba(51,65,85,0.12);
     }
 
     .secondary:hover {
       background: #1e293b;
     }
 
+    .save-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .library-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
+    }
+
+    .library-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .library-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0e7490;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid #a5f3fc;
+    }
+
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr 190px;
+      grid-template-columns: 1fr;
       gap: 12px;
-      margin-bottom: 18px;
+      margin: 16px 0;
+    }
+
+    .namespace-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .namespace-card {
+      border: 1px solid #dbeafe;
+      background: linear-gradient(135deg, #eff6ff, #ffffff);
+      color: #0f172a;
+      border-radius: 20px;
+      padding: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+      margin-top: 0;
+      text-align: left;
+    }
+
+    .namespace-card:hover,
+    .namespace-card.active {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      border-color: transparent;
+    }
+
+    .namespace-card .icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37,99,235,0.12);
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .namespace-card.active .icon,
+    .namespace-card:hover .icon {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .namespace-card strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 5px;
+      word-break: break-word;
+    }
+
+    .namespace-card span {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .active-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .active-title strong {
+      color: var(--dark);
     }
 
     .snippet-list {
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
     .snippet {
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
       background: #ffffff;
+      transition: 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .snippet-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-      margin-bottom: 10px;
+    .snippet::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--primary), var(--violet));
+    }
+
+    .snippet:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(15,23,42,0.08);
     }
 
     .namespace {
       display: inline-block;
-      background: #dbeafe;
-      color: #1e40af;
-      padding: 5px 9px;
+      background: #e0f2fe;
+      color: #075985;
+      padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 6px;
+      font-weight: 900;
+      margin-bottom: 8px;
     }
 
     .snippet h3 {
-      color: #0f172a;
+      color: var(--dark);
       margin-bottom: 5px;
+      font-size: 19px;
+      padding-left: 4px;
     }
 
     .desc {
-      color: #64748b;
+      color: var(--muted);
       font-size: 14px;
       margin-bottom: 12px;
+      line-height: 1.5;
+      padding-left: 4px;
     }
 
     pre {
-      background: #0f172a;
+      background: #07111f;
       color: #e5e7eb;
-      padding: 14px;
-      border-radius: 12px;
+      padding: 16px;
+      border-radius: 16px;
       overflow-x: auto;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
+      border: 1px solid #1e293b;
     }
 
     .snippet-actions {
@@ -182,54 +443,1175 @@
 
     .empty {
       text-align: center;
-      color: #64748b;
-      padding: 40px 10px;
+      color: var(--muted);
+      padding: 44px 12px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 20px;
+    }
+
+    .empty strong {
+      display: block;
+      color: var(--dark);
+      font-size: 18px;
+      margin-bottom: 7px;
+    }
+
+
+
+    .search-help{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .search-help span{
+      background:linear-gradient(135deg,#eff6ff,#dbeafe);
+      border:1px solid #bfdbfe;
+      color:#1d4ed8;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s;
+      user-select:none;
+    }
+
+    .search-help span:hover{
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:white;
+      transform:translateY(-2px);
+    }
+
+    .upload-box{
+      margin-top:14px;
+      padding:14px;
+      border:2px dashed #bfdbfe;
+      border-radius:18px;
+      background:linear-gradient(135deg,#f8fbff,#eef6ff);
+    }
+
+    .upload-label{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      padding:13px 14px;
+      border-radius:15px;
+      background:linear-gradient(135deg,#0f62fe,#7c3aed);
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 12px 22px rgba(15,98,254,0.20);
+    }
+
+    .upload-label input{display:none;}
+
+    .upload-note{
+      margin-top:9px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .attachments{
+      display:grid;
+      gap:10px;
+      margin:12px 0;
+    }
+
+    .attachment-card{
+      border:1px solid #dbeafe;
+      background:#f8fafc;
+      border-radius:14px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .attachment-card a{
+      color:#0f62fe;
+      font-weight:800;
+      text-decoration:none;
+      word-break:break-word;
+    }
+
+    .attachment-card img{
+      max-width:160px;
+      max-height:120px;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      display:block;
+      margin-top:8px;
+    }
+
+
+
+    .brand-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    .sap-logo{
+      display:inline-grid;
+      place-items:center;
+      width:76px;
+      height:46px;
+      border-radius:14px;
+      background:white;
+      color:#0f62fe;
+      font-weight:1000;
+      font-size:22px;
+      letter-spacing:-1px;
+      box-shadow:0 14px 30px rgba(0,0,0,0.18);
+    }
+
+
+    .page-tabs{
+      max-width:1250px;
+      margin:-48px auto 0;
+      padding:0 24px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:3;
+    }
+
+    .page-tab{
+      margin-top:0;
+      padding:14px 22px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.92);
+      color:#0f172a;
+      border:1px solid rgba(191,219,254,0.9);
+      box-shadow:0 14px 28px rgba(15,23,42,0.12);
+    }
+
+    .page-tab.active,
+    .page-tab:hover{
+      background:linear-gradient(135deg,#0f62fe,#7c3aed);
+      color:white;
+    }
+
+    .container{
+      grid-template-columns:1fr;
+      margin-top:18px;
+    }
+
+    .page-section{
+      display:none;
+    }
+
+    .page-section.active{
+      display:block;
+    }
+
+    .add-card{
+      max-width:760px;
+      margin:auto;
+      position:static;
+    }
+
+    .search-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+    }
+
+    .help-btn{
+      margin-top:0;
+      white-space:nowrap;
+      background:linear-gradient(135deg,#0f172a,#0f62fe);
+    }
+
+    .help-panel{
+      display:none;
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid #bfdbfe;
+      background:linear-gradient(135deg,#f8fbff,#eef6ff);
+      color:#334155;
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .help-panel.show{
+      display:block;
+    }
+
+    .help-panel strong{
+      color:#0f172a;
+    }
+
+    .module-buttons{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .module-btn{
+      margin-top:0;
+      padding:8px 13px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#eff6ff,#dbeafe);
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+      box-shadow:none;
+    }
+
+    .module-btn.active,
+    .module-btn:hover{
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:white;
+    }
+
+
+    .category-buttons{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:16px 0 20px;
+    }
+
+    .category-btn{
+      margin-top:0;
+      padding:10px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#eff6ff,#dbeafe);
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+      box-shadow:none;
+    }
+
+    .category-btn.active,
+    .category-btn:hover{
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:white;
+      transform:translateY(-2px);
+    }
+
+    .meta-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:8px 0 10px;
+    }
+
+    .meta-pill{
+      display:inline-block;
+      background:#f1f5f9;
+      color:#334155;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid #e2e8f0;
+    }
+
+    .signature-adarsh {
+      position: fixed;
+      right: 22px;
+      bottom: 18px;
+      z-index: 9999;
+      padding: 10px 18px;
+      color: white;
+      font-family: "Brush Script MT", "Segoe Script", cursive;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #0f62fe, #7c3aed, #38bdf8);
+      border-radius: 999px;
+      box-shadow: 0 14px 28px rgba(15, 98, 254, 0.28);
+      border: 1px solid rgba(255,255,255,0.5);
+      user-select: none;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      color: #64748b;
+      padding: 26px 20px 70px;
+      color: var(--muted);
       font-size: 13px;
     }
 
-    @media (max-width: 850px) {
+
+    /* Full screen professional Add New Code page */
+    #addPage.add-card{
+      max-width:1250px;
+      width:100%;
+      padding:26px;
+      border-radius:30px;
+      background:
+        radial-gradient(circle at top right, rgba(15,98,254,0.10), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(239,246,255,0.94));
+      box-shadow:0 24px 55px rgba(15,23,42,0.12);
+    }
+
+    #addPage .add-header{
+      padding:26px;
+      border-radius:26px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:16px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    #addPage .add-header::after{
+      content:"{}";
+      font-weight:1000;
+      font-size:92px;
+      opacity:0.12;
+      position:absolute;
+      right:28px;
+      top:8px;
+    }
+
+    #addPage .add-header h2{
+      font-size:30px;
+      letter-spacing:-0.5px;
+    }
+
+    #addPage label{
+      margin-top:18px;
+      font-size:14px;
+    }
+
+    #addPage input,
+    #addPage select{
+      min-height:54px;
+      font-size:15px;
+      border-radius:18px;
+    }
+
+    #addPage textarea{
+      min-height:380px;
+      font-size:14px;
+      border-radius:20px;
+    }
+
+    #addPage .save-row{
+      margin-top:20px;
+      padding-top:16px;
+      border-top:1px solid #dbeafe;
+      justify-content:flex-end;
+    }
+
+    #addPage .save-row button{
+      min-width:150px;
+      padding:14px 20px;
+      border-radius:16px;
+    }
+
+    .footer-pro{
+      margin:34px auto 0;
+      max-width:1250px;
+      padding:0 24px 80px;
+    }
+
+    .footer-inner{
+      background:linear-gradient(135deg,#06142e,#0f62fe 58%,#38bdf8);
+      color:white;
+      border-radius:30px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1.2fr 0.8fr;
+      gap:24px;
+      align-items:center;
+      box-shadow:0 24px 50px rgba(15,98,254,0.22);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .footer-inner::after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      right:-70px;
+      top:-90px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.14);
+    }
+
+    .footer-brand{
+      position:relative;
+      z-index:1;
+    }
+
+    .footer-brand h3{
+      font-size:26px;
+      margin-bottom:8px;
+    }
+
+    .footer-brand p{
+      color:#dbeafe;
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .footer-pills{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .footer-pills span{
+      background:rgba(255,255,255,0.16);
+      border:1px solid rgba(255,255,255,0.28);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      color:#f8fafc;
+    }
+
+
+    /* Premium website feel */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(15,98,254,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,98,254,0.035) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.65), transparent 75%);
+      z-index:0;
+    }
+
+    header{
+      min-height:360px;
+      box-shadow:0 24px 70px rgba(2,6,23,0.22);
+      border-bottom:1px solid rgba(255,255,255,0.24);
+    }
+
+    header::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 30%, rgba(255,255,255,0.16), transparent 20%),
+        radial-gradient(circle at 76% 40%, rgba(124,58,237,0.22), transparent 26%);
+    }
+
+    .hero-card,
+    .card,
+    .footer-inner{
+      backdrop-filter: blur(14px);
+    }
+
+    .sap-logo{
+      width:86px;
+      height:54px;
+      font-size:25px;
+      box-shadow:0 18px 45px rgba(0,0,0,0.22);
+    }
+
+    .badge{
+      font-weight:900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+    .hero-card{
+      padding:26px;
+      border-radius:30px;
+      transform:translateY(2px);
+    }
+
+    .hero-card h3{
+      font-size:21px;
+    }
+
+    .page-tab{
+      min-width:178px;
+      text-align:center;
+      letter-spacing:.2px;
+      border:1px solid rgba(255,255,255,0.55);
+      box-shadow:0 18px 42px rgba(15,23,42,0.18);
+    }
+
+    .card{
+      border:1px solid rgba(191,219,254,0.95);
+      box-shadow:
+        0 26px 70px rgba(15,23,42,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .library-card{
+      padding:28px;
+      border-radius:32px;
+    }
+
+    .library-title-row h2{
+      font-size:28px;
+      letter-spacing:-0.4px;
+    }
+
+    .category-btn,
+    .module-btn{
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:.15px;
+      box-shadow:0 10px 22px rgba(37,99,235,0.08);
+    }
+
+    .namespace-card{
+      min-height:150px;
+      border-radius:24px;
+      padding:22px;
+      background:
+        radial-gradient(circle at top right, rgba(15,98,254,0.10), transparent 38%),
+        linear-gradient(135deg, #f8fbff, #ffffff);
+    }
+
+    .namespace-card strong{
+      font-size:18px;
+      letter-spacing:.3px;
+    }
+
+    .namespace-card .icon{
+      width:44px;
+      height:44px;
+      border-radius:15px;
+      font-weight:1000;
+    }
+
+    .snippet{
+      border-radius:26px;
+      padding:22px;
+      box-shadow:0 18px 38px rgba(15,23,42,0.06);
+    }
+
+    pre{
+      min-height:170px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 18px 35px rgba(2,6,23,0.14);
+    }
+
+    #addPage.add-card{
+      border:1px solid rgba(147,197,253,0.95);
+      box-shadow:
+        0 30px 85px rgba(15,23,42,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    #addPage .add-header{
+      min-height:120px;
+      background:
+        radial-gradient(circle at right, rgba(56,189,248,0.32), transparent 36%),
+        linear-gradient(135deg,#06142e,#0f62fe 62%,#7c3aed);
+      box-shadow:0 22px 45px rgba(15,98,254,0.25);
+    }
+
+    #addPage .add-header h2{
+      font-size:34px;
+    }
+
+    #addPage input,
+    #addPage select,
+    #addPage textarea{
+      border:1px solid #bfdbfe;
+      box-shadow:0 12px 25px rgba(15,23,42,0.04);
+    }
+
+    .footer-inner{
+      min-height:190px;
+      border:1px solid rgba(255,255,255,0.24);
+    }
+
+
+
+    /* Smooth premium animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatGlow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.88) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .hero > div, .page-tabs, .card, .footer-inner {
+      animation: fadeUp 0.75s ease both;
+    }
+
+    .hero-card, .sap-logo, .signature-adarsh {
+      animation: floatGlow 4s ease-in-out infinite;
+    }
+
+    .snippet, .namespace-card, .category-btn, .page-tab, .module-btn {
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+    }
+
+    .snippet:hover, .card:hover {
+      box-shadow: 0 30px 75px rgba(15,23,42,0.14);
+    }
+
+    .mail-modal-overlay{
+      position:fixed;
+      inset:0;
+      z-index:10000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(2,6,23,0.62);
+      backdrop-filter:blur(12px);
+    }
+
+    .mail-modal-overlay.show{
+      display:flex;
+    }
+
+    .mail-modal{
+      width:min(460px,100%);
+      background:linear-gradient(180deg,#ffffff,#eef6ff);
+      border:1px solid rgba(191,219,254,0.95);
+      border-radius:30px;
+      padding:26px;
+      box-shadow:0 35px 90px rgba(2,6,23,0.35);
+      animation:modalPop .32s ease both;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .mail-modal::before{
+      content:"@";
+      position:absolute;
+      right:20px;
+      top:-14px;
+      font-size:96px;
+      font-weight:1000;
+      color:rgba(15,98,254,0.08);
+    }
+
+    .mail-modal h3{
+      color:#0f172a;
+      font-size:24px;
+      margin-bottom:8px;
+      position:relative;
+    }
+
+    .mail-modal p{
+      color:#64748b;
+      font-size:14px;
+      line-height:1.6;
+      margin-bottom:16px;
+      position:relative;
+    }
+
+    .mail-modal input{
+      position:relative;
+      min-height:54px;
+      border-radius:18px;
+      border:1px solid #93c5fd;
+      background:white;
+    }
+
+    .mail-modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:16px;
+      position:relative;
+    }
+
+    .mail-status{
+      margin-top:12px;
+      font-size:13px;
+      font-weight:800;
+      color:#0f62fe;
+      min-height:18px;
+    }
+
+    .success-toast{
+      position:fixed;
+      top:22px;
+      right:22px;
+      z-index:10001;
+      display:none;
+      padding:14px 18px;
+      border-radius:999px;
+      color:white;
+      background:linear-gradient(135deg,#16a34a,#06b6d4);
+      box-shadow:0 18px 40px rgba(22,163,74,0.24);
+      font-weight:900;
+      animation:fadeUp .35s ease both;
+    }
+
+    .success-toast.show{
+      display:block;
+    }
+
+
+
+    .auth-modal-overlay{
+      position:fixed;
+      inset:0;
+      z-index:10002;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(2,6,23,0.66);
+      backdrop-filter:blur(14px);
+    }
+
+    .auth-modal-overlay.show{
+      display:flex;
+    }
+
+    .auth-modal{
+      width:min(430px,100%);
+      background:linear-gradient(180deg,#ffffff,#eff6ff);
+      border:1px solid rgba(147,197,253,0.95);
+      border-radius:30px;
+      padding:26px;
+      box-shadow:0 35px 90px rgba(2,6,23,0.38);
+      animation:modalPop .32s ease both;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .auth-modal::before{
+      content:"🔐";
+      position:absolute;
+      right:22px;
+      top:12px;
+      font-size:70px;
+      opacity:.10;
+    }
+
+    .auth-modal h3{
+      color:#0f172a;
+      font-size:24px;
+      margin-bottom:8px;
+      position:relative;
+    }
+
+    .auth-modal p{
+      color:#64748b;
+      font-size:14px;
+      line-height:1.6;
+      margin-bottom:16px;
+      position:relative;
+    }
+
+    .auth-modal input{
+      min-height:54px;
+      border-radius:18px;
+      border:1px solid #93c5fd;
+      background:white;
+      position:relative;
+    }
+
+    .auth-modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:16px;
+      position:relative;
+    }
+
+    .auth-status{
+      margin-top:12px;
+      min-height:18px;
+      color:#dc2626;
+      font-size:13px;
+      font-weight:900;
+    }
+
+
+    .master-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .master-download-btn{
+      background:linear-gradient(135deg,#7c3aed,#0f62fe,#06b6d4);
+      box-shadow:0 12px 25px rgba(124,58,237,0.18);
+    }
+
+    .snippet-select-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:12px 0 4px;
+      padding:10px 12px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#f8fbff,#eef6ff);
+      border:1px solid #dbeafe;
+      color:#334155;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .snippet-select-row input{
+      width:18px;
+      height:18px;
+      accent-color:#0f62fe;
+      box-shadow:none;
+    }
+
+    .custom-modal-overlay{
+      position:fixed;
+      inset:0;
+      z-index:10004;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(2,6,23,0.64);
+      backdrop-filter:blur(14px);
+    }
+
+    .custom-modal-overlay.show{
+      display:flex;
+    }
+
+    .custom-modal{
+      width:min(440px,100%);
+      background:linear-gradient(180deg,#ffffff,#eef6ff);
+      border:1px solid rgba(147,197,253,0.95);
+      border-radius:30px;
+      padding:26px;
+      box-shadow:0 35px 90px rgba(2,6,23,0.38);
+      animation:modalPop .32s ease both;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .custom-modal::before{
+      content:"✓";
+      position:absolute;
+      right:22px;
+      top:-18px;
+      font-size:104px;
+      font-weight:1000;
+      color:rgba(15,98,254,0.08);
+    }
+
+    .custom-modal h3{
+      color:#0f172a;
+      font-size:24px;
+      margin-bottom:10px;
+      position:relative;
+    }
+
+    .custom-modal p{
+      color:#475569;
+      font-size:14px;
+      line-height:1.7;
+      position:relative;
+      white-space:pre-wrap;
+    }
+
+    .custom-modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:18px;
+      position:relative;
+    }
+
+
+    .progress-modal-overlay,
+    .namespace-download-overlay{
+      position:fixed;
+      inset:0;
+      z-index:10005;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(2,6,23,0.66);
+      backdrop-filter:blur(14px);
+    }
+
+    .progress-modal-overlay.show,
+    .namespace-download-overlay.show{
+      display:flex;
+    }
+
+    .progress-modal,
+    .namespace-download-modal{
+      width:min(560px,100%);
+      background:linear-gradient(180deg,#ffffff,#eef6ff);
+      border:1px solid rgba(147,197,253,0.95);
+      border-radius:30px;
+      padding:26px;
+      box-shadow:0 35px 90px rgba(2,6,23,0.38);
+      animation:modalPop .32s ease both;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .progress-modal::before{
+      content:"☁";
+      position:absolute;
+      right:22px;
+      top:-20px;
+      font-size:112px;
+      font-weight:1000;
+      color:rgba(15,98,254,0.08);
+    }
+
+    .namespace-download-modal::before{
+      content:"⬇";
+      position:absolute;
+      right:22px;
+      top:-18px;
+      font-size:104px;
+      font-weight:1000;
+      color:rgba(124,58,237,0.08);
+    }
+
+    .progress-modal h3,
+    .namespace-download-modal h3{
+      color:#0f172a;
+      font-size:24px;
+      margin-bottom:8px;
+      position:relative;
+    }
+
+    .progress-modal p,
+    .namespace-download-modal p{
+      color:#64748b;
+      font-size:14px;
+      line-height:1.6;
+      margin-bottom:16px;
+      position:relative;
+    }
+
+    .progress-bar-wrap{
+      width:100%;
+      height:16px;
+      border-radius:999px;
+      background:#dbeafe;
+      overflow:hidden;
+      position:relative;
+      border:1px solid #bfdbfe;
+    }
+
+    .progress-bar-fill{
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(135deg,#0f62fe,#7c3aed,#06b6d4);
+      transition:width .35s ease;
+    }
+
+    .progress-percent{
+      margin-top:12px;
+      font-size:18px;
+      font-weight:1000;
+      color:#0f62fe;
+      position:relative;
+    }
+
+    .namespace-list{
+      max-height:360px;
+      overflow:auto;
+      display:grid;
+      gap:10px;
+      padding-right:4px;
+      position:relative;
+    }
+
+    .namespace-check-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:13px 14px;
+      border:1px solid #dbeafe;
+      background:linear-gradient(135deg,#f8fbff,#ffffff);
+      border-radius:18px;
+      cursor:pointer;
+      transition:.2s;
+      font-weight:900;
+      color:#0f172a;
+    }
+
+    .namespace-check-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 26px rgba(15,23,42,0.08);
+      border-color:#93c5fd;
+    }
+
+    .namespace-check-card input{
+      width:18px;
+      height:18px;
+      accent-color:#0f62fe;
+      box-shadow:none;
+    }
+
+    .namespace-count-pill{
+      background:#e0f2fe;
+      color:#075985;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .namespace-modal-actions{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+      position:relative;
+    }
+
+
+    .namespace-select-tools{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .namespace-selected-count{
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#ecfeff;
+      color:#0e7490;
+      border:1px solid #a5f3fc;
+      font-size:12px;
+      font-weight:1000;
+    }
+
+    .namespace-modal-actions .right-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
       .container {
         grid-template-columns: 1fr;
         padding: 15px;
       }
 
-      .toolbar {
-        grid-template-columns: 1fr;
+      .add-card {
+        position: static;
+      }
+
+      .footer-inner{
+        grid-template-columns:1fr;
+      }
+
+      .footer-pills{
+        justify-content:flex-start;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>SAP ABAP Guide</h1>
-    <p>Save your ABAP programs, CDS views, reports, enhancements, and useful logic under namespaces.</p>
+    <div class="hero">
+      <div>
+        <div class="brand-row">
+          <span class="sap-logo">SAP</span>
+          <span class="badge">Personal SAP Knowledge Base</span>
+        </div>
+        <h1>SAP Guide</h1>
+        <p>Keep your SAP notes, ABAP code, functional documents, screenshots, Excel files, and module-wise guides in one flexible library.</p>
+      </div>
+
+      <div class="hero-card">
+        <h3>Organize like a pro</h3>
+        <ul>
+          <li>Create categories like Reports, OData, Adobe, Smartforms, Module Pool, Configuration, CDS</li>
+          <li>Use modules like MM, PP, FI, SD, HR, QM, PS, BASIS</li>
+          <li>Password protected edit and delete</li>
+          <li>Firebase stores data for all devices</li>
+        </ul>
+      </div>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Add ABAP Code</h2>
+  <div class="page-tabs">
+    <button id="addTab" class="page-tab" onclick="openPage('add')">+ Add New Code</button>
+    <button id="libraryTab" class="page-tab active" onclick="openPage('library')">📚 My SAP Library</button>
+  </div>
 
-      <label>Namespace / Category</label>
-      <select id="namespace">
+  <main class="container">
+    <section id="addPage" class="card add-card page-section">
+      <div class="add-header">
+        <h2>Add New Code</h2>
+        <p>Create a custom namespace, add title, paste ABAP code, and save it online.</p>
+      </div>
+
+      <label>Namespace / Topic Name</label>
+      <input id="customNamespace" placeholder="Example: ZMM, Vendor Report, Sales Guide" />
+
+      <label>Category</label>
+      <select id="category">
         <option value="Reports">Reports</option>
-        <option value="ALV">ALV</option>
-        <option value="CDS Views">CDS Views</option>
-        <option value="RAP">RAP</option>
-        <option value="BAPI/FM">BAPI / Function Module</option>
+        <option value="Adobe">Adobe</option>
+        <option value="Smartforms">Smartforms</option>
+        <option value="Class">Class</option>
+        <option value="CDS">CDS</option>
+        <option value="OData">OData</option>
+        <option value="Table Function">Table Function</option>
+        <option value="AMDP">AMDP</option>
         <option value="Enhancement">Enhancement</option>
-        <option value="Excel / abap2xlsx">Excel / abap2xlsx</option>
-        <option value="Transport / TOC">Transport / TOC</option>
-        <option value="Custom">Custom</option>
+        <option value="IDOC">IDOC</option>
+        <option value="RFC">RFC</option>
+        <option value="Function Modules">Function Modules</option>
+        <option value="Module Pool">Module Pool</option>
+        <option value="Configuration">Configuration</option>
+        <option value="Others">Others</option>
       </select>
 
-      <label>Custom Namespace</label>
-      <input id="customNamespace" placeholder="Example: ZMM, ZFI, ZSD, Dynamic Table" />
+      <label>Module</label>
+      <input id="moduleName" placeholder="Select module or type custom module" />
+      <div class="module-buttons">
+        <button type="button" class="module-btn" onclick="setModule('MM')">MM</button>
+        <button type="button" class="module-btn" onclick="setModule('PP')">PP</button>
+        <button type="button" class="module-btn" onclick="setModule('FI')">FI</button>
+        <button type="button" class="module-btn" onclick="setModule('SD')">SD</button>
+        <button type="button" class="module-btn" onclick="setModule('HR')">HR</button>
+        <button type="button" class="module-btn" onclick="setModule('QM')">QM</button>
+        <button type="button" class="module-btn" onclick="setModule('PS')">PS</button>
+        <button type="button" class="module-btn" onclick="setModule('BASIS')">BASIS</button>
+        <button type="button" class="module-btn" onclick="setModule('Other')">Other</button>
+      </div>
 
       <label>Code Title</label>
       <input id="title" placeholder="Example: Dynamic Excel Upload Program" />
@@ -237,145 +1619,589 @@
       <label>Description</label>
       <input id="description" placeholder="Small note about this code" />
 
-      <label>ABAP Code</label>
+      <label>SAP Item</label>
       <textarea id="code" placeholder="Paste your ABAP code here..."></textarea>
 
-      <button onclick="saveSnippet()">Save Code</button>
-      <button class="secondary" onclick="clearForm()">Clear</button>
+      <label>Upload Files</label>
+      <div class="upload-box">
+        <label class="upload-label">
+          📎 Upload Text, Image, Excel Files
+          <input id="fileUploader" type="file" multiple accept=".txt,.csv,.xls,.xlsx,.png,.jpg,.jpeg,.webp,.gif,image/*" onchange="handleFileUpload(event)" />
+        </label>
+        <p class="upload-note">Supported: TXT, CSV, Excel, PNG, JPG, WEBP. Files are saved with this code in Firebase as Base64.</p>
+        <div id="selectedFiles" class="attachments"></div>
+      </div>
+
+      <div class="save-row">
+        <button onclick="saveSnippet()">Save Code</button>
+        <button class="secondary" onclick="clearForm()">Clear Form</button>
+      </div>
     </section>
 
-    <section class="card">
-      <h2>My ABAP Library</h2>
+    <section id="libraryPage" class="card library-card page-section active">
+      <div class="library-title-row">
+        <div>
+          <h2>My SAP Library</h2>
+          <p class="section-note">Click a namespace below. Only content from that namespace will open.</p>
+        </div>
+        <span class="library-pill" id="totalCount">0 Codes</span>
+      </div>
 
-      <div class="toolbar">
-        <input id="search" oninput="renderSnippets()" placeholder="Search by title, namespace, description, or code..." />
-        <select id="filter" onchange="renderSnippets()">
-          <option value="All">All Namespaces</option>
-        </select>
+      <div id="categoryButtons" class="category-buttons"></div>
+
+      <div id="namespaceGrid" class="namespace-grid"></div>
+
+      <div class="active-title">
+        <strong id="activeNamespaceTitle">Click a namespace card or search category to view SAP content</strong>
+        <div class="master-actions">
+          <button class="master-download-btn" onclick="downloadSelectedMaster()">⬇ Master Download</button>
+          <button class="secondary" onclick="showAllNamespaces()">Hide Code</button>
+        </div>
       </div>
 
       <div id="snippetList" class="snippet-list"></div>
     </section>
   </main>
 
-  <footer>
-    Your code is saved in this browser using localStorage.
+
+
+  <div id="authModalOverlay" class="auth-modal-overlay">
+    <div class="auth-modal">
+      <h3>Authorization Required</h3>
+      <p id="authModalText">Enter admin password to continue.</p>
+      <input id="authPasswordInput" type="password" placeholder="Enter password" />
+      <div id="authStatus" class="auth-status"></div>
+      <div class="auth-modal-actions">
+        <button type="button" class="secondary" onclick="cancelAuthModal()">Cancel</button>
+        <button type="button" onclick="confirmAuthModal()">Authorize</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mailModalOverlay" class="mail-modal-overlay">
+    <div class="mail-modal">
+      <h3>Send SAP Code</h3>
+      <p>Enter receiver email id. Mail button is password protected like Edit and Delete.</p>
+      <input id="receiverEmailInput" type="email" placeholder="receiver@example.com" />
+      <div id="mailStatus" class="mail-status"></div>
+      <div class="mail-modal-actions">
+        <button type="button" class="secondary" onclick="closeMailModal()">Cancel</button>
+        <button type="button" class="mail-btn" onclick="sendMailFromModal()">Send Mail</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customModalOverlay" class="custom-modal-overlay">
+    <div class="custom-modal">
+      <h3 id="customModalTitle">Message</h3>
+      <p id="customModalText"></p>
+      <div id="customModalActions" class="custom-modal-actions"></div>
+    </div>
+  </div>
+
+
+  <div id="progressModalOverlay" class="progress-modal-overlay">
+    <div class="progress-modal">
+      <h3 id="progressTitle">Saving Data</h3>
+      <p id="progressMessage">Please wait while your SAP item is being saved online.</p>
+      <div class="progress-bar-wrap">
+        <div id="progressBarFill" class="progress-bar-fill"></div>
+      </div>
+      <div id="progressPercent" class="progress-percent">0%</div>
+    </div>
+  </div>
+
+  <div id="namespaceDownloadOverlay" class="namespace-download-overlay">
+    <div class="namespace-download-modal">
+      <h3>Master Download</h3>
+      <p>Select namespace under one roof. All SAP items and attached files under selected namespaces will download in one ZIP.</p>
+      <div id="namespaceDownloadList" class="namespace-list"></div>
+      <div class="namespace-modal-actions">
+        <div class="namespace-select-tools">
+          <button type="button" class="secondary" onclick="toggleAllDownloadNamespaces(true)">Select All Namespaces</button>
+          <button type="button" class="secondary" onclick="toggleAllDownloadNamespaces(false)">Clear All</button>
+          <span id="namespaceSelectedCount" class="namespace-selected-count">0 Selected</span>
+        </div>
+        <div class="right-actions">
+          <button type="button" class="secondary" onclick="closeNamespaceDownloadModal()">Cancel</button>
+          <button type="button" class="master-download-btn" onclick="downloadNamespacesFromModal()">Download ZIP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="successToast" class="success-toast">Mail sent successfully ✅</div>
+
+  <div class="signature-adarsh">Adarsh</div>
+
+  <footer class="footer-pro">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>SAP Guide by Adarsh</h3>
+        <p>Store ABAP programs, SAP notes, screenshots, Excel files, category-wise namespaces, and reusable technical references in one clean library.</p>
+      </div>
+      <div class="footer-pills">
+        <span>🔥 ABAP Library</span>
+        <span>🔐 Protected Edit</span>
+        <span>☁️ Firebase Sync</span>
+        <span>📚 Category Wise</span>
+        <span>🔗 OData Ready</span>
+      </div>
+    </div>
   </footer>
 
-  <script>
-    let snippets = JSON.parse(localStorage.getItem("sapAbapSnippets")) || [
-      {
-        namespace: "Reports",
-        title: "Simple ABAP Report Structure",
-        description: "Basic report format with selection screen and START-OF-SELECTION.",
-        code: `REPORT zsample_report.
+  <!-- EmailJS free email sender. Replace IDs below in JS setup section. -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
-PARAMETERS: p_bukrs TYPE bukrs.
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      updateDoc,
+      deleteDoc,
+      doc,
+      serverTimestamp,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-START-OF-SELECTION.
-  WRITE: / 'Company Code:', p_bukrs.`
-      },
-      {
-        namespace: "Transport / TOC",
-        title: "TR Status Check from E070",
-        description: "Check transport request status before release logic.",
-        code: `DATA: lv_status TYPE e070-trstatus.
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqfi5lqMtIM8R95-t98f0iakPNefODPYQ",
+      authDomain: "sap-abap-guide.firebaseapp.com",
+      projectId: "sap-abap-guide",
+      storageBucket: "sap-abap-guide.firebasestorage.app",
+      messagingSenderId: "957581021222",
+      appId: "1:957581021222:web:82b0ddceec80220d8c16e7"
+    };
 
-SELECT SINGLE trstatus
-  FROM e070
-  INTO @lv_status
-  WHERE trkorr = @p_tr.
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const snippetsCollection = collection(db, "abapSnippets");
 
-IF sy-subrc <> 0.
-  MESSAGE 'TR not found' TYPE 'E'.
-ENDIF.`
-      }
-    ];
+    /*
+      ================= EMAILJS SETUP =================
+      1. Create free account on EmailJS.
+      2. Add Gmail service using: tiwariadarsh5552@gmail.com
+      3. Create template with these variables:
+         {{to_email}}, {{from_name}}, {{reply_to}}, {{title}},
+         {{subject}}, {{mail_subject}}, {{email_subject}},
+         {{namespace}}, {{category}}, {{module_name}}, {{description}},
+         {{sap_code}}, {{message}}, {{html_message}}, {{file_details}}
+      4. Replace the three values below.
+    */
+    const emailJsPublicKey = "iho7pP-GVBqyRn1Qb";
+    const emailJsServiceId = "service_q3f9s0p";
+    const emailJsTemplateId = "template_zy5p1nk";
 
-    let editIndex = null;
-
-    function saveToStorage() {
-      localStorage.setItem("sapAbapSnippets", JSON.stringify(snippets));
+    if (window.emailjs && emailJsPublicKey) {
+      window.emailjs.init(emailJsPublicKey);
     }
 
-    function saveSnippet() {
-      const namespaceSelect = document.getElementById("namespace").value;
-      const customNamespace = document.getElementById("customNamespace").value.trim();
-      const title = document.getElementById("title").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const code = document.getElementById("code").value.trim();
+    let snippets = [];
+    let editIndex = null;
+    let editDocId = null;
+    let activeNamespace = null;
+    let activeCategory = null;
+    let uploadedFiles = [];
+    let pendingMailIndex = null;
+    let selectedSnippetIds = new Set();
+    let customConfirmResolver = null;
+    const adminPassword = "Abap@123456";
 
-      const namespace = customNamespace || namespaceSelect;
+    let authResolver = null;
 
-      if (!title || !code) {
-        alert("Please enter title and ABAP code.");
+    function checkAdminPassword(actionName) {
+      return new Promise(resolve => {
+        authResolver = resolve;
+        document.getElementById("authModalText").textContent = `Enter admin password to ${actionName}.`;
+        document.getElementById("authPasswordInput").value = "";
+        document.getElementById("authStatus").textContent = "";
+        document.getElementById("authModalOverlay").classList.add("show");
+        setTimeout(() => document.getElementById("authPasswordInput").focus(), 80);
+      });
+    }
+
+    function confirmAuthModal() {
+      const enteredPassword = document.getElementById("authPasswordInput").value;
+      if (enteredPassword === adminPassword) {
+        document.getElementById("authModalOverlay").classList.remove("show");
+        document.getElementById("authStatus").textContent = "";
+        if (authResolver) authResolver(true);
+        authResolver = null;
+        return;
+      }
+      document.getElementById("authStatus").textContent = "Wrong password. Access denied.";
+    }
+
+    function cancelAuthModal() {
+      document.getElementById("authModalOverlay").classList.remove("show");
+      document.getElementById("authStatus").textContent = "";
+      if (authResolver) authResolver(false);
+      authResolver = null;
+    }
+
+    function selectCategory(category){
+      activeCategory = activeCategory === category ? null : category;
+      activeNamespace = null;
+      renderSnippets();
+    }
+
+    function setModule(value){
+      document.getElementById("moduleName").value = value;
+      document.querySelectorAll(".module-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent.trim() === value);
+      });
+    }
+
+    function handleFileUpload(event) {
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
+
+      const readers = files.map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          name: file.name,
+          type: file.type || "application/octet-stream",
+          size: file.size,
+          data: reader.result
+        });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      }));
+
+      Promise.all(readers).then(result => {
+        uploadedFiles = uploadedFiles.concat(result);
+        renderSelectedFiles();
+        event.target.value = "";
+      }).catch(() => alert("File upload failed. Please try again."));
+    }
+
+    function renderSelectedFiles() {
+      const box = document.getElementById("selectedFiles");
+      if (!box) return;
+
+      if (uploadedFiles.length === 0) {
+        box.innerHTML = "";
         return;
       }
 
-      const snippet = { namespace, title, description, code };
+      box.innerHTML = uploadedFiles.map((file, index) => `
+        <div class="attachment-card">
+          <div>
+            <strong>${escapeHtml(file.name)}</strong><br>
+            <small>${formatFileSize(file.size)}</small>
+          </div>
+          <button type="button" class="danger" onclick="removeSelectedFile(${index})">Remove</button>
+        </div>
+      `).join("");
+    }
 
-      if (editIndex === null) {
-        snippets.unshift(snippet);
+    function removeSelectedFile(index) {
+      uploadedFiles.splice(index, 1);
+      renderSelectedFiles();
+    }
+
+    function formatFileSize(bytes) {
+      if (!bytes) return "0 KB";
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function renderAttachments(files) {
+      if (!files || files.length === 0) return "";
+
+      return `
+        <div class="attachments">
+          ${files.map(file => {
+            const isImage = String(file.type || "").startsWith("image/");
+            return `
+              <div class="attachment-card">
+                <div>
+                  <a href="${file.data}" download="${escapeHtml(file.name)}" target="_blank">📎 ${escapeHtml(file.name)}</a><br>
+                  <small>${formatFileSize(file.size || 0)}</small>
+                  ${isImage ? `<img src="${file.data}" alt="${escapeHtml(file.name)}" />` : ""}
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+
+    window.saveSnippet = saveSnippet;
+    window.clearForm = clearForm;
+    window.renderSnippets = renderSnippets;
+    window.copyCode = copyCode;
+    window.editSnippet = editSnippet;
+    window.deleteSnippet = deleteSnippet;
+    window.mailSnippet = mailSnippet;
+    window.closeMailModal = closeMailModal;
+    window.confirmAuthModal = confirmAuthModal;
+    window.cancelAuthModal = cancelAuthModal;
+    window.sendMailFromModal = sendMailFromModal;
+    window.toggleSnippetSelection = toggleSnippetSelection;
+    window.downloadSelectedMaster = downloadSelectedMaster;
+    window.closeNamespaceDownloadModal = closeNamespaceDownloadModal;
+    window.toggleAllDownloadNamespaces = toggleAllDownloadNamespaces;
+    window.updateNamespaceSelectedCount = updateNamespaceSelectedCount;
+    window.downloadNamespacesFromModal = downloadNamespacesFromModal;
+    window.closeCustomModal = closeCustomModal;
+    window.confirmCustomModal = confirmCustomModal;
+    window.selectNamespace = selectNamespace;
+    window.showAllNamespaces = showAllNamespaces;
+    window.openPage = openPage;
+    window.selectCategory = selectCategory;
+    window.setModule = setModule;
+    window.handleFileUpload = handleFileUpload;
+    window.removeSelectedFile = removeSelectedFile;
+
+
+    function openPage(pageName) {
+      const addPage = document.getElementById("addPage");
+      const libraryPage = document.getElementById("libraryPage");
+      const addTab = document.getElementById("addTab");
+      const libraryTab = document.getElementById("libraryTab");
+
+      if (pageName === "add") {
+        addPage.classList.add("active");
+        libraryPage.classList.remove("active");
+        addTab.classList.add("active");
+        libraryTab.classList.remove("active");
       } else {
-        snippets[editIndex] = snippet;
-        editIndex = null;
+        libraryPage.classList.add("active");
+        addPage.classList.remove("active");
+        libraryTab.classList.add("active");
+        addTab.classList.remove("active");
+      }
+    }
+
+    async function loadSnippetsFromFirebase() {
+      const q = query(snippetsCollection, orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+
+      snippets = snapshot.docs.map(documentItem => ({
+        id: documentItem.id,
+        ...documentItem.data()
+      }));
+
+      renderSnippets();
+    }
+
+    async function saveSnippet() {
+      const customNamespace = document.getElementById("customNamespace").value.trim();
+      const category = document.getElementById("category").value;
+      const moduleName = document.getElementById("moduleName").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const code = document.getElementById("code").value.trim();
+      const namespace = customNamespace;
+
+      if (!namespace || !category || !title || !code) {
+        showCustomAlert("Please enter namespace, category, title and SAP content.");
+        return;
       }
 
-      saveToStorage();
-      clearForm();
-      renderSnippets();
+      const snippet = {
+        namespace,
+        category,
+        moduleName,
+        title,
+        description,
+        code,
+        files: uploadedFiles,
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        showProgressModal("Saving Data", "Preparing SAP item for online save...", 5);
+        await waitSmall(180);
+        updateProgressModal(25, "Validating namespace, category, code and uploaded files...");
+
+        if (editDocId === null) {
+          await waitSmall(160);
+          updateProgressModal(50, "Creating new SAP item in Firebase...");
+          await addDoc(snippetsCollection, {
+            ...snippet,
+            createdAt: serverTimestamp()
+          });
+          activeCategory = category;
+          activeNamespace = namespace;
+        } else {
+          await waitSmall(160);
+          updateProgressModal(50, "Updating existing SAP item in Firebase...");
+          await updateDoc(doc(db, "abapSnippets", editDocId), snippet);
+          activeCategory = category;
+          activeNamespace = namespace;
+          editDocId = null;
+          editIndex = null;
+        }
+
+        updateProgressModal(78, "Refreshing SAP library...");
+        clearForm();
+        await loadSnippetsFromFirebase();
+
+        updateProgressModal(100, "Save completed successfully.");
+        await waitSmall(450);
+        closeProgressModal();
+
+        openPage("library");
+        showCustomAlert("Code saved online.", "Saved");
+      } catch (error) {
+        console.error("Save error:", error);
+        closeProgressModal();
+        showCustomAlert("Save failed. Please check Firebase connection and try again.", "Save Error");
+      }
     }
 
     function clearForm() {
       document.getElementById("customNamespace").value = "";
+      document.getElementById("category").value = "Reports";
+      document.getElementById("moduleName").value = "";
+      document.querySelectorAll(".module-btn").forEach(btn => btn.classList.remove("active"));
       document.getElementById("title").value = "";
       document.getElementById("description").value = "";
       document.getElementById("code").value = "";
+      uploadedFiles = [];
+      renderSelectedFiles();
       editIndex = null;
+      editDocId = null;
     }
 
-    function renderFilter() {
-      const filter = document.getElementById("filter");
-      const selected = filter.value;
-      const namespaces = ["All", ...new Set(snippets.map(item => item.namespace))];
-      filter.innerHTML = namespaces.map(ns => `<option value="${ns}">${ns}</option>`).join("");
-      filter.value = namespaces.includes(selected) ? selected : "All";
+    function getCategoryCounts() {
+      const counts = {};
+      snippets.forEach(item => {
+        const category = item.category || "Reports";
+        counts[category] = (counts[category] || 0) + 1;
+      });
+      return counts;
+    }
+
+    function renderCategoryButtons() {
+      const box = document.getElementById("categoryButtons");
+      const counts = getCategoryCounts();
+      const categories = [
+        "Reports", "Adobe", "Smartforms", "Class", "CDS", "OData", "Table Function", "AMDP",
+        "Enhancement", "IDOC", "RFC", "Function Modules", "Module Pool", "Configuration", "Others"
+      ];
+
+      box.innerHTML = categories.map(category => {
+        const count = counts[category] || 0;
+        return `
+          <button type="button" class="category-btn ${activeCategory === category ? "active" : ""}" onclick="selectCategory('${escapeJs(category)}')">
+            ${escapeHtml(category)} ${count ? `(${count})` : ""}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function getNamespaceCounts() {
+      const counts = {};
+      snippets
+        .filter(item => !activeCategory || (item.category || "Reports") === activeCategory)
+        .forEach(item => {
+          const namespace = item.namespace || "Uncategorized";
+          counts[namespace] = (counts[namespace] || 0) + 1;
+        });
+      return counts;
+    }
+
+    function renderNamespaceCards() {
+      const grid = document.getElementById("namespaceGrid");
+      const counts = getNamespaceCounts();
+      const namespaces = Object.keys(counts).sort();
+
+      document.getElementById("totalCount").textContent = `${snippets.length} Code${snippets.length === 1 ? "" : "s"}`;
+
+      if (!activeCategory) {
+        grid.innerHTML = `<div class="empty"><strong>Select category first</strong>Click any category button above to view namespaces.</div>`;
+        return;
+      }
+
+      if (namespaces.length === 0) {
+        grid.innerHTML = `<div class="empty"><strong>No namespace found</strong>No code saved under ${escapeHtml(activeCategory)} category yet.</div>`;
+        return;
+      }
+
+      grid.innerHTML = namespaces.map(ns => `
+        <button class="namespace-card ${activeNamespace === ns ? "active" : ""}" onclick="selectNamespace('${escapeJs(ns)}')">
+          <div class="icon">{ }</div>
+          <strong>${escapeHtml(ns)}</strong>
+          <span>${counts[ns]} SAP Item${counts[ns] === 1 ? "" : "s"}</span>
+        </button>
+      `).join("");
+    }
+
+    function selectNamespace(namespace) {
+      // Click namespace card to show its ABAP code.
+      // Click the same card again to hide the code.
+      activeNamespace = activeNamespace === namespace ? null : namespace;
+      renderSnippets();
+    }
+
+    function showAllNamespaces() {
+      // Hide ABAP code and keep selected category namespaces visible.
+      activeNamespace = null;
+      renderSnippets();
     }
 
     function renderSnippets() {
-      renderFilter();
+      renderCategoryButtons();
+      renderNamespaceCards();
 
       const list = document.getElementById("snippetList");
-      const search = document.getElementById("search").value.toLowerCase();
-      const filter = document.getElementById("filter").value;
+
+      if (!activeCategory) {
+        document.getElementById("activeNamespaceTitle").textContent = "Click a category to view namespaces";
+        list.innerHTML = `<div class="empty"><strong>SAP content is hidden</strong>Select a category button above, then click namespace card to view ABAP code.</div>`;
+        return;
+      }
+
+      if (!activeNamespace) {
+        document.getElementById("activeNamespaceTitle").textContent = `Showing ${activeCategory} namespaces`;
+        list.innerHTML = `<div class="empty"><strong>SAP content is hidden</strong>Click any namespace card above to open ABAP code.</div>`;
+        return;
+      }
+
+      document.getElementById("activeNamespaceTitle").textContent = `Showing: ${activeNamespace}`;
 
       const filtered = snippets.filter(item => {
-        const text = `${item.namespace} ${item.title} ${item.description} ${item.code}`.toLowerCase();
-        const matchSearch = text.includes(search);
-        const matchFilter = filter === "All" || item.namespace === filter;
-        return matchSearch && matchFilter;
+        const matchCategory = (item.category || "Reports") === activeCategory;
+        const matchNamespace = item.namespace === activeNamespace;
+        return matchCategory && matchNamespace;
       });
 
       if (filtered.length === 0) {
-        list.innerHTML = `<div class="empty">No ABAP code found.</div>`;
+        list.innerHTML = `<div class="empty"><strong>No code found</strong>Click another namespace or add code.</div>`;
         return;
       }
 
       list.innerHTML = filtered.map(item => {
-        const realIndex = snippets.indexOf(item);
+        const realIndex = snippets.findIndex(snippet => snippet.id === item.id);
         return `
           <div class="snippet">
-            <div class="snippet-top">
-              <div>
-                <span class="namespace">${escapeHtml(item.namespace)}</span>
-                <h3>${escapeHtml(item.title)}</h3>
-              </div>
+            <span class="namespace">${escapeHtml(item.namespace)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <div class="meta-row">
+              <span class="meta-pill">Category: ${escapeHtml(item.category || "Reports")}</span>
+              ${item.moduleName ? `<span class="meta-pill">Module: ${escapeHtml(item.moduleName)}</span>` : ""}
             </div>
             <p class="desc">${escapeHtml(item.description || "No description added.")}</p>
             <pre><code>${escapeHtml(item.code)}</code></pre>
+            ${renderAttachments(item.files)}
+            <label class="snippet-select-row">
+              <input type="checkbox" ${selectedSnippetIds.has(item.id) ? "checked" : ""} onchange="toggleSnippetSelection('${escapeJs(item.id)}', this.checked)" />
+              Select this SAP item for Master Download
+            </label>
             <div class="snippet-actions">
-              <button onclick="copyCode(${realIndex})">Copy</button>
+              <button onclick="copyCode(${realIndex})">Copy Code</button>
               <button class="secondary" onclick="editSnippet(${realIndex})">Edit</button>
+              <button class="mail-btn" onclick="mailSnippet(${realIndex})">Mail</button>
               <button class="danger" onclick="deleteSnippet(${realIndex})">Delete</button>
             </div>
           </div>
@@ -385,29 +2211,384 @@ ENDIF.`
 
     function copyCode(index) {
       navigator.clipboard.writeText(snippets[index].code);
-      alert("Code copied!");
+      showCustomAlert("Code copied!");
     }
 
-    function editSnippet(index) {
+    async function mailSnippet(index) {
+      if (!(await checkAdminPassword("send this code by mail"))) {
+        return;
+      }
+
+      const item = snippets[index];
+      if (!item) {
+        showCustomAlert("Code not found.");
+        return;
+      }
+
+      pendingMailIndex = index;
+      document.getElementById("receiverEmailInput").value = "";
+      document.getElementById("mailStatus").textContent = "";
+      document.getElementById("mailModalOverlay").classList.add("show");
+      setTimeout(() => document.getElementById("receiverEmailInput").focus(), 80);
+    }
+
+    function closeMailModal() {
+      pendingMailIndex = null;
+      document.getElementById("mailModalOverlay").classList.remove("show");
+      document.getElementById("mailStatus").textContent = "";
+    }
+
+    async function sendMailFromModal() {
+      const index = pendingMailIndex;
+      const item = snippets[index];
+      const statusBox = document.getElementById("mailStatus");
+      const receiverEmail = document.getElementById("receiverEmailInput").value.trim();
+
+      if (!item) {
+        statusBox.textContent = "Code not found.";
+        return;
+      }
+
+      if (!window.emailjs) {
+        statusBox.textContent = "EmailJS library not loaded. Check internet/CDN.";
+        return;
+      }
+
+      if (!emailJsPublicKey || !emailJsServiceId || !emailJsTemplateId) {
+        statusBox.textContent = "EmailJS IDs missing in code.";
+        return;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(receiverEmail)) {
+        statusBox.textContent = "Please enter a valid receiver email id.";
+        return;
+      }
+
+      const codeFileName = `${safeFileName(item.namespace || item.title || "SAP_ABAP_Code")}.txt`;
+      const codeText = buildCodeText(item);
+      const fileDetails = (item.files || []).length
+        ? (item.files || []).map(file => `• ${file.name || "File"} (${formatFileSize(file.size || 0)})`).join("\n")
+        : "No files attached.";
+
+      const emailAttachments = buildEmailAttachments(item, codeFileName, codeText);
+      const subjectText = item.namespace || item.title || "SAP ABAP Code";
+      const htmlMessage = `
+        <h2>${escapeHtml(subjectText)}</h2>
+        <p><b>Namespace:</b> ${escapeHtml(item.namespace || "")}</p>
+        <p><b>Category:</b> ${escapeHtml(item.category || "")}</p>
+        <p><b>Module:</b> ${escapeHtml(item.moduleName || "")}</p>
+        <p><b>Title:</b> ${escapeHtml(item.title || "")}</p>
+        <p><b>Description:</b> ${escapeHtml(item.description || "No description added.")}</p>
+        <h3>ABAP Code</h3>
+        <pre style="white-space:pre-wrap;font-family:Consolas,monospace;">${escapeHtml(item.code || "")}</pre>
+        <p><b>Attached Files:</b><br>${escapeHtml(fileDetails).replaceAll("\n", "<br>")}</p>
+      `;
+
+      const templateParams = {
+        to_email: receiverEmail,
+        email: receiverEmail,
+        user_email: receiverEmail,
+        receiver_email: receiverEmail,
+        from_name: "Adarsh SAP Guide",
+        reply_to: "tiwariadarsh5552@gmail.com",
+
+        title: subjectText,
+        subject: subjectText,
+        mail_subject: subjectText,
+        email_subject: subjectText,
+        user_subject: subjectText,
+        subject_line: subjectText,
+        namespace_subject: subjectText,
+        namespace: item.namespace || "",
+        category: item.category || "",
+        module_name: item.moduleName || "",
+        description: item.description || "No description added.",
+
+        sap_code: codeText,
+        code: codeText,
+        message: codeText,
+        content: codeText,
+        body: codeText,
+        text: codeText,
+        html_message: htmlMessage,
+
+        file_details: fileDetails,
+        code_file_name: codeFileName,
+        attachments: emailAttachments,
+        my_file: emailAttachments[0] ? emailAttachments[0].data : "",
+        my_file_name: codeFileName
+      };
+
+      try {
+        statusBox.textContent = "Sending mail with ABAP text content...";
+        await window.emailjs.send(emailJsServiceId, emailJsTemplateId, templateParams, emailJsPublicKey);
+        closeMailModal();
+        showSuccessToast("Mail sent successfully ✅");
+      } catch (error) {
+        console.error("EmailJS error full object:", error);
+        const errorMessage = error && (error.text || error.message || error.status)
+          ? `${error.status || ""} ${error.text || error.message || ""}`.trim()
+          : "Unknown EmailJS error. Open browser Console/F12 for full object.";
+        statusBox.textContent = "Mail failed: " + errorMessage;
+      }
+    }
+
+
+    function showProgressModal(title, message, percent) {
+      document.getElementById("progressTitle").textContent = title || "Processing";
+      document.getElementById("progressMessage").textContent = message || "Please wait...";
+      document.getElementById("progressBarFill").style.width = `${percent || 0}%`;
+      document.getElementById("progressPercent").textContent = `${percent || 0}%`;
+      document.getElementById("progressModalOverlay").classList.add("show");
+    }
+
+    function updateProgressModal(percent, message) {
+      document.getElementById("progressBarFill").style.width = `${percent}%`;
+      document.getElementById("progressPercent").textContent = `${percent}%`;
+      if (message) document.getElementById("progressMessage").textContent = message;
+    }
+
+    function closeProgressModal() {
+      document.getElementById("progressModalOverlay").classList.remove("show");
+      document.getElementById("progressBarFill").style.width = "0%";
+      document.getElementById("progressPercent").textContent = "0%";
+    }
+
+    function waitSmall(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function showSuccessToast(message) {
+      const toast = document.getElementById("successToast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function showCustomAlert(message, title = "SAP Guide") {
+      document.getElementById("customModalTitle").textContent = title;
+      document.getElementById("customModalText").textContent = message;
+      document.getElementById("customModalActions").innerHTML = `<button type="button" onclick="closeCustomModal()">OK</button>`;
+      document.getElementById("customModalOverlay").classList.add("show");
+    }
+
+    function closeCustomModal() {
+      document.getElementById("customModalOverlay").classList.remove("show");
+      if (customConfirmResolver) {
+        customConfirmResolver(false);
+        customConfirmResolver = null;
+      }
+    }
+
+    function showCustomConfirm(title, message) {
+      return new Promise(resolve => {
+        customConfirmResolver = resolve;
+        document.getElementById("customModalTitle").textContent = title;
+        document.getElementById("customModalText").textContent = message;
+        document.getElementById("customModalActions").innerHTML = `
+          <button type="button" class="secondary" onclick="closeCustomModal()">Cancel</button>
+          <button type="button" class="danger" onclick="confirmCustomModal()">Confirm</button>
+        `;
+        document.getElementById("customModalOverlay").classList.add("show");
+      });
+    }
+
+    function confirmCustomModal() {
+      document.getElementById("customModalOverlay").classList.remove("show");
+      if (customConfirmResolver) {
+        customConfirmResolver(true);
+        customConfirmResolver = null;
+      }
+    }
+
+    function toggleSnippetSelection(id, checked) {
+      if (checked) selectedSnippetIds.add(id);
+      else selectedSnippetIds.delete(id);
+    }
+
+    async function downloadSelectedMaster() {
+      if (!(await checkAdminPassword("download SAP items"))) {
+        return;
+      }
+
+      openNamespaceDownloadModal();
+    }
+
+    function openNamespaceDownloadModal() {
+      const counts = {};
+      snippets.forEach(item => {
+        const namespace = item.namespace || "Uncategorized";
+        counts[namespace] = (counts[namespace] || 0) + 1;
+      });
+
+      const namespaces = Object.keys(counts).sort();
+      const list = document.getElementById("namespaceDownloadList");
+
+      if (!namespaces.length) {
+        list.innerHTML = `<div class="empty"><strong>No SAP item found</strong>Please save SAP code first.</div>`;
+      } else {
+        list.innerHTML = namespaces.map(ns => `
+          <label class="namespace-check-card">
+            <span>${escapeHtml(ns)}</span>
+            <span class="namespace-count-pill">${counts[ns]} Item${counts[ns] === 1 ? "" : "s"}</span>
+            <input type="checkbox" class="namespace-download-check" value="${escapeHtml(ns)}" onchange="updateNamespaceSelectedCount()" />
+          </label>
+        `).join("");
+      }
+
+      updateNamespaceSelectedCount();
+      document.getElementById("namespaceDownloadOverlay").classList.add("show");
+    }
+
+    function closeNamespaceDownloadModal() {
+      document.getElementById("namespaceDownloadOverlay").classList.remove("show");
+    }
+
+    function toggleAllDownloadNamespaces(checked) {
+      document.querySelectorAll(".namespace-download-check").forEach(input => input.checked = checked);
+      updateNamespaceSelectedCount();
+    }
+
+    function updateNamespaceSelectedCount() {
+      const selectedCount = document.querySelectorAll(".namespace-download-check:checked").length;
+      const totalCount = document.querySelectorAll(".namespace-download-check").length;
+      const countBox = document.getElementById("namespaceSelectedCount");
+      if (countBox) {
+        countBox.textContent = `${selectedCount} Selected / ${totalCount} Total`;
+      }
+    }
+
+    async function downloadNamespacesFromModal() {
+      const selectedNamespaces = Array.from(document.querySelectorAll(".namespace-download-check:checked"))
+        .map(input => input.value);
+
+      if (!selectedNamespaces.length) {
+        showCustomAlert("Please select at least one namespace.", "No Namespace Selected");
+        return;
+      }
+
+      const selectedItems = snippets.filter(item => selectedNamespaces.includes(item.namespace || "Uncategorized"));
+      if (!selectedItems.length) {
+        showCustomAlert("No SAP item found under selected namespace.", "No Data");
+        return;
+      }
+
+      await createMasterZip(selectedItems);
+      closeNamespaceDownloadModal();
+    }
+
+    async function createMasterZip(selectedItems) {
+      if (!window.JSZip) {
+        showCustomAlert("JSZip library not loaded. Please check internet/CDN.", "Download Error");
+        return;
+      }
+
+      const zip = new JSZip();
+      selectedItems.forEach((item, itemIndex) => {
+        const namespaceFolder = safeFileName(item.namespace || "Uncategorized");
+        const itemFolderName = `${String(itemIndex + 1).padStart(2, "0")}_${safeFileName(item.title || item.namespace || "SAP_Item")}`;
+        const folder = zip.folder(namespaceFolder).folder(itemFolderName);
+        folder.file(`${safeFileName(item.namespace || item.title || "ABAP_Code")}.txt`, buildCodeText(item));
+
+        (item.files || []).forEach((file, fileIndex) => {
+          try {
+            const fileName = safeFileName(file.name || `attachment_${fileIndex + 1}`);
+            const data = String(file.data || "");
+            if (data.includes(",")) {
+              folder.file(`attachments/${fileName}`, data.split(",")[1], { base64: true });
+            }
+          } catch (error) {
+            console.error("File zip error:", error);
+          }
+        });
+      });
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const downloadName = `SAP_Guide_Master_Download_${new Date().toISOString().slice(0,10)}.zip`;
+      downloadBlob(blob, downloadName);
+      showSuccessToast("Master download created ✅");
+    }
+
+
+    function buildCodeText(item) {
+      return `Namespace: ${item.namespace || ""}
+Category: ${item.category || ""}
+Module: ${item.moduleName || ""}
+Title: ${item.title || ""}
+Description: ${item.description || "No description added."}
+
+SAP Item / ABAP Code:
+${item.code || ""}`;
+    }
+
+    function buildEmailAttachments(item, codeFileName, codeText) {
+      const attachments = [
+        { name: codeFileName, data: `data:text/plain;base64,${btoa(unescape(encodeURIComponent(codeText)))}` }
+      ];
+
+      (item.files || []).forEach(file => {
+        if (file && file.data && file.name) {
+          attachments.push({ name: file.name, data: file.data });
+        }
+      });
+
+      return attachments;
+    }
+
+    function safeFileName(name) {
+      return String(name || "SAP_Item")
+        .replace(/[\/:*?"<>|]+/g, "_")
+        .replace(/\s+/g, "_")
+        .slice(0, 80);
+    }
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function editSnippet(index) {
+      if (!(await checkAdminPassword("edit this code"))) {
+        return;
+      }
+
       const item = snippets[index];
       document.getElementById("customNamespace").value = item.namespace;
+      document.getElementById("category").value = item.category || "Reports";
+      setModule(item.moduleName || "");
       document.getElementById("title").value = item.title;
-      document.getElementById("description").value = item.description;
+      document.getElementById("description").value = item.description || "";
       document.getElementById("code").value = item.code;
+      uploadedFiles = item.files ? [...item.files] : [];
+      renderSelectedFiles();
       editIndex = index;
+      editDocId = item.id;
+      openPage("add");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function deleteSnippet(index) {
-      if (confirm("Delete this ABAP code?")) {
-        snippets.splice(index, 1);
-        saveToStorage();
-        renderSnippets();
+    async function deleteSnippet(index) {
+      if (!(await checkAdminPassword("delete this code"))) {
+        return;
+      }
+
+      if (await showCustomConfirm("Delete Confirmation", "Delete this ABAP code?")) {
+        await deleteDoc(doc(db, "abapSnippets", snippets[index].id));
+        selectedSnippetIds.delete(snippets[index].id);
+        await loadSnippetsFromFirebase();
+        showSuccessToast("Code deleted successfully ✅");
       }
     }
 
     function escapeHtml(text) {
-      return text
+      return String(text)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -415,7 +2596,26 @@ ENDIF.`
         .replaceAll("'", "&#039;");
     }
 
-    renderSnippets();
+    function escapeJs(text) {
+      return String(text)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'");
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" && document.getElementById("authModalOverlay").classList.contains("show")) {
+        confirmAuthModal();
+      }
+      if (event.key === "Escape") {
+        if (document.getElementById("authModalOverlay").classList.contains("show")) cancelAuthModal();
+        if (document.getElementById("mailModalOverlay").classList.contains("show")) closeMailModal();
+        if (document.getElementById("customModalOverlay").classList.contains("show")) closeCustomModal();
+        if (document.getElementById("namespaceDownloadOverlay").classList.contains("show")) closeNamespaceDownloadModal();
+      }
+    });
+
+
+    loadSnippetsFromFirebase();
   </script>
 </body>
 </html>
